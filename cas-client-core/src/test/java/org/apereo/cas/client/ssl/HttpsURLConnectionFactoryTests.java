@@ -21,11 +21,13 @@ package org.apereo.cas.client.ssl;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.net.ssl.HostnameVerifier;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
+import java.util.Properties;
 
 import static org.junit.Assert.*;
 
@@ -37,6 +39,14 @@ public final class HttpsURLConnectionFactoryTests {
     @Before
     public void setUp() throws Exception {
         this.httpsURLConnectionFactory = new HttpsURLConnectionFactory();
+    }
+
+    @Test
+    public void testHashCode(){
+        HostnameVerifier hostnameVerifier = httpsURLConnectionFactory.hostnameVerifier;
+        Properties sslConfiguration = httpsURLConnectionFactory.sslConfiguration;
+        httpsURLConnectionFactory = new HttpsURLConnectionFactory(hostnameVerifier, sslConfiguration);
+        assertEquals(-1278795289, httpsURLConnectionFactory.hashCode());
     }
 
 

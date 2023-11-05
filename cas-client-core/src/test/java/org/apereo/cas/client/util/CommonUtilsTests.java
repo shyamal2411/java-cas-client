@@ -22,10 +22,14 @@ import org.apereo.cas.client.PublicTestHttpServer;
 import org.apereo.cas.client.ssl.HttpsURLConnectionFactory;
 
 import junit.framework.TestCase;
+import org.junit.Test;
+import org.junit.jupiter.api.*;
 
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+
+import static org.junit.Assert.assertThrows;
 
 /**
  * Tests for the CommonUtils.
@@ -143,5 +147,60 @@ public final class CommonUtilsTests extends TestCase {
     public void testUrlEncode() {
         assertEquals("this+is+a+very+special+parameter+with+%3D%25%2F",
                 CommonUtils.urlEncode("this is a very special parameter with =%/"));
+    }
+
+    @Test
+    public void testToIntPositiveCase() {
+        String value = "12";
+        assertEquals(12, CommonUtils.toInt(value, -1));
+    }
+
+    @Test
+    public void testToIntNegativeCase() {
+        String value = null;
+        int expected_value = -1;
+        assertEquals(expected_value, CommonUtils.toInt(value, -1));
+    }
+
+    @Test
+    public void testToIntExceptionCase() {
+        String value = "ABC";
+        int defaultValue = -1;
+        int expectedValue = -1;
+        assertEquals(expectedValue, CommonUtils.toInt(value, defaultValue));
+    }
+
+    @Test
+    public void testToBooleanObjectWithTrue() {
+
+        assertEquals(Boolean.TRUE, CommonUtils.toBooleanObject("true"));
+        assertEquals(Boolean.TRUE, CommonUtils.toBooleanObject("TRUE"));
+        assertEquals(Boolean.TRUE, CommonUtils.toBooleanObject("True"));
+    }
+
+    @Test
+    public void testToBooleanObjectWithFalse() {
+        assertEquals(Boolean.FALSE, CommonUtils.toBooleanObject("false"));
+        assertEquals(Boolean.FALSE, CommonUtils.toBooleanObject("FALSE"));
+        assertEquals(Boolean.FALSE, CommonUtils.toBooleanObject("False"));
+    }
+
+    @Test
+    public void testToBooleanObjectWithOtherValues() {
+        assertEquals(Boolean.TRUE, CommonUtils.toBooleanObject("yes"));
+        assertEquals(Boolean.TRUE, CommonUtils.toBooleanObject("YES"));
+        assertEquals(Boolean.TRUE, CommonUtils.toBooleanObject("Yes"));
+
+        assertEquals(Boolean.FALSE, CommonUtils.toBooleanObject("no"));
+        assertEquals(Boolean.FALSE, CommonUtils.toBooleanObject("NO"));
+        assertEquals(Boolean.FALSE, CommonUtils.toBooleanObject("No"));
+    }
+
+
+    @Test
+    public void testToBooleanObjectWithInvalidValues() {
+        assertNull(CommonUtils.toBooleanObject("abc"));
+        assertNull(CommonUtils.toBooleanObject("123"));
+        assertNull(CommonUtils.toBooleanObject("onoff"));
     }
 }

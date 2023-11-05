@@ -64,12 +64,12 @@ public final class HttpsURLConnectionFactory implements HttpURLConnectionFactory
      * Hostname verifier used when making an SSL request to the CAS server.
      * Defaults to {@link HttpsURLConnection#getDefaultHostnameVerifier()}
      */
-    private HostnameVerifier hostnameVerifier = HttpsURLConnection.getDefaultHostnameVerifier();
+    public HostnameVerifier hostnameVerifier = HttpsURLConnection.getDefaultHostnameVerifier();
 
     /**
      * Properties file that can contains key/trust info for Client Side Certificates
      */
-    private Properties sslConfiguration = new Properties();
+    public Properties sslConfiguration = new Properties();
 
     public HttpsURLConnectionFactory() {
     }
@@ -197,7 +197,7 @@ public final class HttpsURLConnectionFactory implements HttpURLConnectionFactory
                         keyStore.load(keyStoreIS, this.sslConfiguration.getProperty("keyStorePass").toCharArray());
                         LOGGER.debug("Keystore has {} keys", keyStore.size());
                         final var keyManager = KeyManagerFactory.getInstance(this.sslConfiguration
-                            .getProperty("keyManagerType", "SunX509"));
+                                .getProperty("keyManagerType", "SunX509"));
                         keyManager.init(keyStore, this.sslConfiguration.getProperty("certificatePassword").toCharArray());
                         sslContext.init(keyManager.getKeyManagers(), null, null);
                         return sslContext.getSocketFactory();
